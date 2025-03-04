@@ -2,7 +2,8 @@
 Transformer-Guided Multi-Scale Feature Fusion for Skin Lesion Segmentation
 
 ## Features
-- Hybrid CNN-Transformer architecture
+# Hybrid CNN-Transformer architecture
+
   ![ScaleFusionNet Architecture](Fig/Architecture.png)
 - Cross-Attention Transformer Module (CATM)
 - Adaptive multi-scale feature fusion
