@@ -397,7 +397,4 @@ if __name__ == '__main__':
         print(f"Input shape: {dummy_input.shape}")
         print(f"Output shape: {output.shape}")
 
-    print("\nComputing FLOPs and Parameters...")
-    flops, params = profile(model, inputs=(dummy_input,), verbose=False)
-    print(f"Total Parameters: {params/1e6:.2f} M")
-    print(f"Total FLOPs: {flops/1e9:.2f} GFLOPs")
+    
