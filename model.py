@@ -159,7 +159,7 @@ class DynamicSwinTransformer(nn.Module):
         return x
 
 class CATM(nn.Module):
-    """Cross-Attention Transformer Module with corrected SharedSA (AvgPool + MaxPool)."""
+    """Cross-Attention Transformer Module with SharedSA (AvgPool + MaxPool)."""
     def __init__(self, dim: int, num_heads: int = 4):
         super().__init__()
         self.dim = dim
@@ -169,14 +169,12 @@ class CATM(nn.Module):
         self.v_proj = nn.Linear(dim, dim)
         self.cross_attn = nn.MultiheadAttention(dim, num_heads, batch_first=True)
 
-        # Corrected SharedSA implementation with AvgPool + MaxPool
         self.fuse = nn.Sequential(
             nn.Conv2d(dim * 3, dim, kernel_size=1),  # Concatenates [X, AvgPool(X), MaxPool(X)]
             nn.Sigmoid()  # Spatial attention gating
         )
 
     def forward_shared_sa(self, x: torch.Tensor) -> torch.Tensor:
-        """Implements SharedSA with AvgPool + MaxPool as per manuscript."""
         avg_pool = F.adaptive_avg_pool2d(x, output_size=(1, 1)).expand_as(x)
         max_pool = F.adaptive_max_pool2d(x, output_size=(1, 1))[0].expand_as(x)
         pooled = torch.cat([x, avg_pool, max_pool], dim=1)
@@ -363,7 +361,7 @@ class UpConv(nn.Module):
         return self.conv(self.up(x))
     
     
-# Updated ScaleFusionNet with encoder level information
+# ScaleFusionNet with encoder level information
 class ScaleFusionNet(nn.Module):
     def __init__(
         self,
